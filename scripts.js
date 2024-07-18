@@ -1,28 +1,45 @@
-import {Builder , By, Key} from "selenium-webdriver"
-import {should} from "chai";
-should()
- 
+import { Builder, By, Key } from "selenium-webdriver";
+import { should } from "chai";
+
+should();
+
 // Testes de Login
-describe ('Testes de Login', async function() {
-    it ('Login com credeciais válidas', async function() {
-        // Abrir o Navegador
-        let driver = await new Builder().forBrowser('Chrome').build()
+describe('Testes de Login', async function() {
+    const driver = await new Builder().forBrowser('Chrome').build();
 
-        //Navegar até o site
-        await driver.get('https://www.saucedemo.com/')
+    it('Login com credenciais válidas', async function() {
+        await driver.get('https://www.saucedemo.com/');
+        await driver.findElement(By.id('user-name')).sendKeys('standard_user', Key.TAB);
+        await driver.findElement(By.id('password')).sendKeys('secret_sauce');
+        await driver.findElement(By.id('login-button')).click();
+    });
 
-        //Inserir Username Válido
-        await driver.findElement(By.id('//*[@id="user-name"]')).sendKeys('standard_user', Key.TAB)
+    it('Login com credenciais inválidas', async function() {
+        await driver.get('https://www.saucedemo.com/');
+        await driver.findElement(By.id('user-name')).sendKeys('wrong_standard_user', Key.TAB);
+        await driver.findElement(By.id('password')).sendKeys('wrong_secret_sauce');
+        await driver.findElement(By.id('login-button')).click();
+    });
 
-        //Inserir Password Válida
-        await driver.findElement(By.id('//*[@id="password"]')).sendKeys('secret_sauce')
+    it('Login com username inválido', async function() {
+        await driver.get('https://www.saucedemo.com/');
+        await driver.findElement(By.id('user-name')).sendKeys('wrong_standard_user', Key.TAB);
+        await driver.findElement(By.id('password')).sendKeys('secret_sauce');
+        await driver.findElement(By.id('login-button')).click();
+    });
 
-        //Clicando no botão Login
-        await driver.findElement(By.id('//*[@id="login-button"]')).click('//*[@id="login-button"]')
-    })
-})   
-        
+    it('Login com password inválido', async function() {
+        await driver.get('https://www.saucedemo.com/');
+        await driver.findElement(By.id('user-name')).sendKeys('standard_user', Key.TAB);
+        await driver.findElement(By.id('password')).sendKeys('wrong_secret_sauce');
+        await driver.findElement(By.id('login-button')).click();
+    });
 
+    it('Login com credenciais nulas', async function() {
+        await driver.get('https://www.saucedemo.com/');
+        await driver.findElement(By.id('login-button')).click();
+    });
+});
 
 
 
